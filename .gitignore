@@ -6,6 +6,7 @@ __pycache__/
 .venv/
 crewai_env/
 venv/
+env/
 
 # IDE files
 .idea/
