@@ -1,0 +1,17 @@
+# Python-specific
+__pycache__/
+*.pyc
+
+# Virtual environments
+.venv/
+crewai_env/
+env/
+venv/
+
+# IDE files
+.idea/
+.vscode/
+
+# Other ignored files
+*.log
+.DS_Store
