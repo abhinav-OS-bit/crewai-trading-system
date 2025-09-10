@@ -1,0 +1,15 @@
+crewai
+crewai_tools
+litellm
+matplotlib
+pandas
+textblob
+reportlab
+faiss-cpu
+python-dotenv
+transformers
+sentence-transformers
+huggingface-hub
+fsspec
+s3fs
+seaborn

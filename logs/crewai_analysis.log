@@ -1,0 +1,243 @@
+2025-09-10 15:12:50,137 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-10 15:12:50,620 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: mps
+2025-09-10 15:12:50,620 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-09-10 15:13:01,992 - __main__ - INFO - Created new RAG collection
+2025-09-10 15:13:02,847 - httpx - INFO - HTTP Request: GET https://chroma-onnx-models.s3.amazonaws.com/all-MiniLM-L6-v2/onnx.tar.gz "HTTP/1.1 200 OK"
+2025-09-10 15:13:12,277 - __main__ - INFO - Populated RAG collection with 2 sample documents
+2025-09-10 15:13:12,289 - __main__ - INFO - All necessary directories created/verified
+2025-09-10 15:13:12,290 - __main__ - INFO - Starting Enhanced CrewAI Trading Analysis System
+2025-09-10 15:13:12,290 - __main__ - INFO - All necessary directories created/verified
+2025-09-10 15:13:12,342 - LiteLLM - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-09-10 15:13:13,239 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+2025-09-10 15:13:13,279 - __main__ - ERROR - Enhanced trading analysis failed: litellm.AuthenticationError: AuthenticationError: OpenAIException - Incorrect API key provided: your-ope************here. You can find your API key at https://platform.openai.com/account/api-keys.
+2025-09-10 15:13:13,289 - __main__ - ERROR - Traceback (most recent call last):
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 725, in completion
+    raise e
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 653, in completion
+    ) = self.make_sync_openai_chat_completion_request(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 149, in sync_wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 471, in make_sync_openai_chat_completion_request
+    raise e
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 453, in make_sync_openai_chat_completion_request
+    raw_response = openai_client.chat.completions.with_raw_response.create(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/openai/_legacy_response.py", line 364, in wrapped
+    return cast(LegacyAPIResponse[R], func(*args, **kwargs))
+                                      ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/openai/_utils/_utils.py", line 287, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/openai/resources/chat/completions/completions.py", line 1150, in create
+    return self._post(
+           ^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/openai/_base_client.py", line 1259, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/openai/_base_client.py", line 1047, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.AuthenticationError: Error code: 401 - {'error': {'message': 'Incorrect API key provided: your-ope************here. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/litellm/main.py", line 1966, in completion
+    raise e
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/litellm/main.py", line 1939, in completion
+    response = openai_chat_completions.completion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 736, in completion
+    raise OpenAIError(
+litellm.llms.openai.common_utils.OpenAIError: Error code: 401 - {'error': {'message': 'Incorrect API key provided: your-ope************here. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/abhinav/Downloads/crewai-trading-system/crewai_trading_system.py", line 1011, in run_enhanced_trading_analysis
+    result = crew.kickoff()
+             ^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/crew.py", line 662, in kickoff
+    result = self._run_sequential_process()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/crew.py", line 776, in _run_sequential_process
+    return self._execute_tasks(self.tasks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/crew.py", line 879, in _execute_tasks
+    task_output = task.execute_sync(
+                  ^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/task.py", line 381, in execute_sync
+    return self._execute_core(agent, context, tools)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/task.py", line 529, in _execute_core
+    raise e  # Re-raise the exception after emitting the event
+    ^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/task.py", line 445, in _execute_core
+    result = agent.execute_task(
+             ^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/agent.py", line 475, in execute_task
+    raise e
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/agent.py", line 451, in execute_task
+    result = self._execute_without_timeout(task_prompt, task)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/agent.py", line 547, in _execute_without_timeout
+    return self.agent_executor.invoke(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/agents/crew_agent_executor.py", line 114, in invoke
+    formatted_answer = self._invoke_loop()
+                       ^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/agents/crew_agent_executor.py", line 207, in _invoke_loop
+    raise e
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/agents/crew_agent_executor.py", line 153, in _invoke_loop
+    answer = get_llm_response(
+             ^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/utilities/agent_utils.py", line 161, in get_llm_response
+    raise e
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/utilities/agent_utils.py", line 154, in get_llm_response
+    answer = llm.call(
+             ^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/llm.py", line 1032, in call
+    return self._handle_non_streaming_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/llm.py", line 813, in _handle_non_streaming_response
+    response = litellm.completion(**params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/litellm/utils.py", line 1330, in wrapper
+    raise e
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/litellm/utils.py", line 1205, in wrapper
+    result = original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/litellm/main.py", line 3427, in completion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2301, in exception_type
+    raise e
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 456, in exception_type
+    raise AuthenticationError(
+litellm.exceptions.AuthenticationError: litellm.AuthenticationError: AuthenticationError: OpenAIException - Incorrect API key provided: your-ope************here. You can find your API key at https://platform.openai.com/account/api-keys.
+
+2025-09-10 15:16:32,069 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-10 15:16:32,229 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: mps
+2025-09-10 15:16:32,229 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-09-10 15:16:36,406 - __main__ - INFO - Found existing RAG collection
+2025-09-10 15:16:36,428 - __main__ - INFO - RAG collection already contains 2 documents
+2025-09-10 15:16:36,433 - __main__ - INFO - All necessary directories created/verified
+2025-09-10 15:16:36,433 - __main__ - INFO - Starting Enhanced CrewAI Trading Analysis System
+2025-09-10 15:16:36,434 - __main__ - INFO - All necessary directories created/verified
+2025-09-10 15:16:36,504 - LiteLLM - INFO - 
+LiteLLM completion() model= gpt-4o-mini; provider = openai
+2025-09-10 15:16:37,490 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-09-10 15:16:37,491 - openai._base_client - INFO - Retrying request to /chat/completions in 0.482615 seconds
+2025-09-10 15:16:38,919 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-09-10 15:16:38,920 - openai._base_client - INFO - Retrying request to /chat/completions in 0.984639 seconds
+2025-09-10 15:16:41,516 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-09-10 15:16:41,556 - __main__ - ERROR - Enhanced trading analysis failed: litellm.RateLimitError: RateLimitError: OpenAIException - You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.
+2025-09-10 15:16:41,569 - __main__ - ERROR - Traceback (most recent call last):
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 725, in completion
+    raise e
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 653, in completion
+    ) = self.make_sync_openai_chat_completion_request(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 149, in sync_wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 471, in make_sync_openai_chat_completion_request
+    raise e
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 453, in make_sync_openai_chat_completion_request
+    raw_response = openai_client.chat.completions.with_raw_response.create(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/openai/_legacy_response.py", line 364, in wrapped
+    return cast(LegacyAPIResponse[R], func(*args, **kwargs))
+                                      ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/openai/_utils/_utils.py", line 287, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/openai/resources/chat/completions/completions.py", line 1150, in create
+    return self._post(
+           ^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/openai/_base_client.py", line 1259, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/openai/_base_client.py", line 1047, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.RateLimitError: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/litellm/main.py", line 1966, in completion
+    raise e
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/litellm/main.py", line 1939, in completion
+    response = openai_chat_completions.completion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 736, in completion
+    raise OpenAIError(
+litellm.llms.openai.common_utils.OpenAIError: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/abhinav/Downloads/crewai-trading-system/crewai_trading_system.py", line 1011, in run_enhanced_trading_analysis
+    result = crew.kickoff()
+             ^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/crew.py", line 662, in kickoff
+    result = self._run_sequential_process()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/crew.py", line 776, in _run_sequential_process
+    return self._execute_tasks(self.tasks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/crew.py", line 879, in _execute_tasks
+    task_output = task.execute_sync(
+                  ^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/task.py", line 381, in execute_sync
+    return self._execute_core(agent, context, tools)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/task.py", line 529, in _execute_core
+    raise e  # Re-raise the exception after emitting the event
+    ^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/task.py", line 445, in _execute_core
+    result = agent.execute_task(
+             ^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/agent.py", line 475, in execute_task
+    raise e
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/agent.py", line 451, in execute_task
+    result = self._execute_without_timeout(task_prompt, task)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/agent.py", line 547, in _execute_without_timeout
+    return self.agent_executor.invoke(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/agents/crew_agent_executor.py", line 114, in invoke
+    formatted_answer = self._invoke_loop()
+                       ^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/agents/crew_agent_executor.py", line 207, in _invoke_loop
+    raise e
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/agents/crew_agent_executor.py", line 153, in _invoke_loop
+    answer = get_llm_response(
+             ^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/utilities/agent_utils.py", line 161, in get_llm_response
+    raise e
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/utilities/agent_utils.py", line 154, in get_llm_response
+    answer = llm.call(
+             ^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/llm.py", line 1032, in call
+    return self._handle_non_streaming_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/crewai/llm.py", line 813, in _handle_non_streaming_response
+    response = litellm.completion(**params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/litellm/utils.py", line 1330, in wrapper
+    raise e
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/litellm/utils.py", line 1205, in wrapper
+    result = original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/litellm/main.py", line 3427, in completion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2301, in exception_type
+    raise e
+  File "/Users/abhinav/anaconda3/envs/crewai_env/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 329, in exception_type
+    raise RateLimitError(
+litellm.exceptions.RateLimitError: litellm.RateLimitError: RateLimitError: OpenAIException - You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.
+
