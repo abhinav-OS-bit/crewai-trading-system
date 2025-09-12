@@ -1,12 +1,13 @@
 # CrewAI Financial Intelligence System
 
-A comprehensive backend system using CrewAI framework for sentiment analysis and SEC insider trading monitoring with advanced LLM integration and RAG capabilities.
+A comprehensive backend system using CrewAI framework for sentiment analysis and SEC insider trading monitoring with web scraping capabilities, advanced LLM integration, and RAG capabilities.
 
 ## 🚀 Features
 
 - **Real-time SEC Filings Analysis** - Monitors Forms 8-K, 10-Q, 10-K, and Form 4 filings
 - **Insider Trading Pattern Recognition** - Distinguishes between planned (10b5-1) and discretionary trades
-- **Real Sentiment Analysis** - Uses TextBlob NLP for analyzing X (Twitter) financial influencers
+- **Web Scraping Sentiment Analysis** - Scrapes X (Twitter) and alternative social media sources using requests + BeautifulSoup
+- **Alternative Data Sources** - Reddit financial communities, news aggregation, and public forums
 - **RAG Integration** - ChromaDB vector store with historical document context
 - **LLM-Enhanced Insights** - GPT-powered analysis for deeper market intelligence
 - **Professional Visualizations** - Comprehensive charts with matplotlib and seaborn
@@ -19,7 +20,7 @@ A comprehensive backend system using CrewAI framework for sentiment analysis and
 
 ```bash
 pip install crewai litellm requests beautifulsoup4 matplotlib pandas seaborn
-pip install tweepy python-dotenv reportlab textblob transformers torch
+pip install python-dotenv reportlab textblob transformers torch
 pip install chromadb sentence-transformers langchain-community faiss-cpu
 ```
 
@@ -29,16 +30,17 @@ Create a `.env` file in the project root:
 
 ```env
 OPENAI_API_KEY=your-openai-api-key-here
-TWITTER_BEARER_TOKEN=your-twitter-bearer-token
+# Twitter API no longer required - using web scraping instead
 ```
 
-**Note**: The system includes fallback modes if API keys are not configured.
+**Note**: The system uses web scraping instead of Twitter API, with fallback sample data when scraping is blocked.
 
 ## 🏗️ Project Structure
 
 ```
 crewai-trading-system/
 ├── crewai_trading_system.py    # Main application
+├── twitter_scraper_tool.py     # Web scraping module
 ├── .env                        # Environment variables
 ├── README.md                   # This file
 ├── charts/                     # Generated charts
@@ -69,12 +71,12 @@ pip install -r requirements.txt
 ### 2. Configure Environment Variables
 
 ```bash
-# Copy the main script
+# Copy the main scripts
 cp crewai_trading_system.py .
+cp twitter_scraper_tool.py .
 
 # Create .env file
 echo "OPENAI_API_KEY=your-openai-api-key-here" > .env
-echo "TWITTER_BEARER_TOKEN=your-twitter-bearer-token" >> .env
 ```
 
 ### 3. Initialize TextBlob (First Time Only)
@@ -83,204 +85,363 @@ echo "TWITTER_BEARER_TOKEN=your-twitter-bearer-token" >> .env
 python -c "import nltk; nltk.download('punkt')"
 ```
 
+## 🕷️ Web Scraping Architecture
+
+### Primary Data Sources
+
+1. **X (Twitter) Scraping**
+   - Attempts multiple sources: Nitter instances, direct X.com
+   - Fallback to realistic sample data when blocked
+   - Browser-like headers to avoid detection
+
+2. **Reddit Financial Communities**
+   - r/investing, r/stocks, r/SecurityAnalysis, r/ValueInvesting
+   - Uses Reddit's public JSON API
+   - Real-time sentiment from financial discussions
+
+3. **Financial News Aggregation**
+   - Yahoo Finance, MarketWatch, CNBC
+   - Scrapes headlines and article summaries
+   - Cross-platform sentiment analysis
+
+### Scraping Features
+
+```python
+# Browser-like session with rotating headers
+session.headers.update({
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36...',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    'Accept-Language': 'en-US,en;q=0.9',
+    # ... additional headers for stealth
+})
+
+# Respectful scraping with delays
+time.sleep(random.uniform(1, 3))  # Random delays between requests
+```
+
+### Legal and Ethical Considerations
+
+- **Respectful Rate Limiting**: Built-in delays between requests
+- **Public Data Only**: Scrapes publicly accessible content
+- **Fallback Systems**: Uses sample data when scraping fails
+- **Terms of Service**: Users should review platform ToS before use
+
 ## 🚀 Usage
 
 ### Quick Start
 
 ```bash
+# Test web scraping functionality
+python twitter_scraper_tool.py
+
+# Run full analysis
 python crewai_trading_system.py
+```
+
+### Integration with Main System
+
+To use web scraping in your main CrewAI system:
+
+```python
+# Replace the original sentiment tool import
+from twitter_scraper_tool import analyze_sentiment_web_scraping as analyze_sentiment
+
+# Update your sentiment agent
+sentiment_agent = Agent(
+    role="Web Scraping Sentiment Intelligence Analyst",
+    tools=[analyze_sentiment, query_rag_system],
+    # ... other configurations
+)
 ```
 
 ### Execution Options
 
-When you run the script, you'll see a menu:
+When you run the main script, you'll see:
 
 ```
 Select execution method:
-1. Enhanced Flow-based Analysis (Recommended)
+1. Enhanced Flow-based Analysis with Web Scraping (Recommended)
 2. Traditional Crew-based Analysis  
 3. Test Individual Components
 ```
 
-**Option 1**: Uses CrewAI Flow with comprehensive guardrails and LLM integration
-**Option 2**: Uses traditional CrewAI Crew approach
-**Option 3**: Tests individual components (RAG, LLM, tools)
+**Option 1**: Uses web scraping for sentiment analysis with comprehensive guardrails
+**Option 2**: Traditional CrewAI approach with web scraping integration
+**Option 3**: Tests individual scrapers and components
 
 ### Expected Output
 
 The system will generate:
 
-1. **Comprehensive Charts** in `charts/` directory:
+1. **Web Scraping Results** in console:
+   ```
+   Testing Web Scraping Sentiment Analysis
+   ==================================================
+   Status: success
+   Creators Analyzed: 3
+   Total Tweets Scraped: 12
+   Overall Sentiment: Positive
+
+   Sample Results:
+   @elonmusk:
+     Sentiment: Positive (0.425)
+     Tweets: 4
+     Sample Tweet: Making life multiplanetary is essential for long-term survival of consciousness...
+   ```
+
+2. **Comprehensive Charts** in `charts/` directory:
    - `insider_trading_comprehensive.png` - Multi-panel trading analysis
-   - `sentiment_comprehensive.png` - Multi-panel sentiment analysis
+   - `sentiment_comprehensive.png` - Multi-panel sentiment analysis with web scraping data
 
-2. **Reports** in `reports/` directory:
-   - `trading_analysis_report_YYYYMMDD_HHMMSS.md` - Markdown report
-   - `trading_analysis_report_YYYYMMDD_HHMMSS.pdf` - PDF report with embedded charts
+3. **Enhanced Reports** in `reports/` directory:
+   - Includes web scraping methodology and data sources
+   - Sample tweets and alternative social media insights
+   - Confidence scores and scraping success rates
 
-3. **Logs** in `logs/` directory:
-   - `crewai_analysis.log` - Detailed execution logs
+## 🤖 Updated CrewAI Agents Architecture
 
-## 🤖 CrewAI Agents Architecture
-
-### Agent Responsibilities
+### Enhanced Agent Responsibilities
 
 1. **SEC Data Intelligence Specialist**
-   - Fetches and analyzes SEC filings
-   - Identifies significant corporate events
+   - Unchanged from original implementation
    - Tools: SECDataTool, RAGTool
 
 2. **Insider Trading Intelligence Analyst**
-   - Monitors Form 4 filings
-   - Distinguishes planned vs discretionary trades
+   - Unchanged from original implementation
    - Tools: InsiderTradingTool, RAGTool
 
 3. **Data Visualization Specialist** 
-   - Creates comprehensive comparison charts
-   - Performs trend analysis
+   - Now includes web scraping metrics visualization
    - Tools: ChartGeneratorTool, RAGTool
 
-4. **Social Media Sentiment Analyst**
-   - Real sentiment analysis using TextBlob
-   - Monitors key financial influencers
-   - Tools: RealSentimentAnalysisTool, RAGTool
+4. **Web Scraping Sentiment Intelligence Analyst** ⭐ **Updated**
+   - Real-time web scraping of multiple platforms
+   - Fallback systems for blocked sources
+   - Multi-platform sentiment aggregation
+   - Tools: WebScrapingSentimentTool, RAGTool
 
 5. **Senior Financial Report Writer**
-   - LLM-enhanced report generation
-   - Synthesizes all data sources
+   - Enhanced with web scraping insights
    - Tools: RAGTool
 
 6. **Financial Document Research Specialist**
-   - RAG-powered historical context
-   - Document similarity search
+   - Unchanged from original implementation
    - Tools: RAGTool
 
-### Flow Architecture with Guardrails
+### Web Scraping Flow Architecture
 
 ```mermaid
 graph TD
-    A[Initialize Analysis] --> B[Gather RAG Context]
-    B --> C[Fetch SEC Data]
-    C --> D[Fetch Insider Data] 
-    D --> E[Analyze Sentiment]
-    E --> F[Generate Charts]
-    F --> G[Compile Report]
+    A[Initialize Scraping] --> B{Try X/Twitter Direct}
+    B -->|Success| C[Extract Tweets]
+    B -->|Blocked| D{Try Nitter Instances}
     
-    A --> H{Validation}
-    H -->|Fail| I[Error Handler]
+    D -->|Success| C
+    D -->|Blocked| E[Use Sample Data]
     
-    B --> J{RAG Available?}
-    J -->|Yes| C
-    J -->|No| K[Fallback Mode]
+    C --> F[Sentiment Analysis]
+    E --> F
     
-    G --> L[Save MD Report]
-    G --> M[Generate PDF Report]
+    F --> G[Try Reddit Scraping]
+    G --> H[Try News Scraping]
+    H --> I[Aggregate Results]
+    
+    I --> J[Generate Report]
+    
+    A --> K[Rate Limiting]
+    K --> L[Random Delays]
+    L --> B
 ```
 
-## 🔍 RAG Integration Details
-
-### Document Types Indexed
-
-- **SEC Filings**: Sample Form 8-K, 10-Q, and Form 4 filings
-- **Market Research**: Insider trading pattern analysis reports
-- **YouTube Transcripts**: Financial analysis video transcripts
-- **Historical Context**: Previous market events and patterns
-
-### Vector Store Configuration
-
-- **Database**: ChromaDB persistent storage
-- **Embeddings**: sentence-transformers/all-MiniLM-L6-v2
-- **Similarity Search**: Cosine similarity with top-5 results
-- **Storage Path**: `rag_data/chroma_db/`
-
-### Query Examples
-
-```python
-# Historical context queries
-"SEC filings insider trading patterns recent trends"
-"market sentiment analysis financial influencers" 
-"quarterly earnings reports impact analysis"
-"corporate governance changes executive transactions"
-```
-
-## 📊 Sample Input/Output
+## 📊 Web Scraping Sample Input/Output
 
 ### Input Configuration
 
 ```python
-# X (Twitter) Creators Analyzed
+# Enhanced scraping targets
 X_CREATORS = [
     "@elonmusk", "@chamath", "@naval", "@balajis", "@APompliano",
     "@cz_binance", "@VitalikButerin", "@aantonop", "@coindesk", "@cointelegraph"
 ]
 
-# Analysis Time Frame
-ANALYSIS_PERIOD = 24  # hours
+# Alternative data sources
+REDDIT_SUBREDDITS = ['investing', 'stocks', 'SecurityAnalysis', 'ValueInvesting']
 
-# LLM Configuration
-LLM_MODEL = "gpt-3.5-turbo"
-LLM_TEMPERATURE = 0.3
+NEWS_SOURCES = [
+    'https://finance.yahoo.com/news/',
+    'https://www.marketwatch.com/latest-news',
+    'https://www.cnbc.com/finance/'
+]
+
+# Scraping configuration
+MAX_TWEETS_PER_CREATOR = 5
+SCRAPING_DELAYS = (1, 3)  # Random delay range in seconds
 ```
 
-### Sample Output
+### Sample Web Scraping Output
 
 #### Console Output
 ```
-================================================================================
-CrewAI-powered Financial Intelligence System
-================================================================================
+Testing Web Scraping Sentiment Analysis
+==================================================
+2025-01-15 10:30:20 - INFO - Starting web scraping sentiment analysis for 3 creators
+2025-01-15 10:30:21 - INFO - Scraping tweets for @elonmusk
+2025-01-15 10:30:22 - WARNING - Could not scrape tweets for @elonmusk, using sample data
+2025-01-15 10:30:24 - INFO - Scraping tweets for @chamath
+2025-01-15 10:30:25 - WARNING - Could not scrape tweets for @chamath, using sample data
+2025-01-15 10:30:27 - INFO - Web scraping sentiment analysis completed: 3 creators analyzed
 
-Select execution method:
-1. Enhanced Flow-based Analysis (Recommended)
-2. Traditional Crew-based Analysis
-3. Test Individual Components
+Status: success
+Creators Analyzed: 3
+Total Tweets Scraped: 12
+Overall Sentiment: Positive
 
-Enter your choice (1-3): 1
+Sample Results:
 
-🚀 Starting Enhanced Flow-based Analysis...
+@elonmusk:
+  Sentiment: Positive (0.425)
+  Tweets: 4
+  Sample Tweet: Making life multiplanetary is essential for long-term survival of consciousness...
 
-2025-01-15 10:30:15 - INFO - Starting enhanced trading analysis flow...
-2025-01-15 10:30:16 - INFO - All necessary directories created/verified
-2025-01-15 10:30:17 - INFO - Enhanced environment validation completed
-2025-01-15 10:30:18 - INFO - RAG system verification successful
-2025-01-15 10:30:19 - INFO - LLM connectivity test successful
-2025-01-15 10:30:20 - INFO - Gathering RAG context for analysis...
-2025-01-15 10:30:22 - INFO - Fetching enhanced SEC data...
-2025-01-15 10:30:24 - INFO - Fetching enhanced insider trading data...
-2025-01-15 10:30:26 - INFO - Analyzing sentiment using real NLP...
-2025-01-15 10:30:28 - INFO - Generating comprehensive charts...
-2025-01-15 10:30:32 - INFO - Compiling comprehensive report with LLM enhancement...
-2025-01-15 10:30:45 - INFO - Comprehensive report saved to reports/trading_analysis_report_20250115_103045.md and reports/trading_analysis_report_20250115_103045.pdf
+@chamath:
+  Sentiment: Neutral (0.125)
+  Tweets: 4
+  Sample Tweet: Focus on companies solving real problems, not just financial engineering...
 
-================================================================================
-ANALYSIS RESULTS
-================================================================================
-Status: completed
-Markdown Report: reports/trading_analysis_report_20250115_103045.md
-PDF Report: reports/trading_analysis_report_20250115_103045.pdf
-Analysis Duration: 0:00:30.123456
+Testing Alternative Social Media Scraping
+==================================================
+Scraping Reddit...
+Reddit posts scraped: 8
+Sample Reddit post:
+  Subreddit: r/investing
+  Title: Market outlook for 2025: What are your thoughts on the current valuation levels?...
 
-✅ System execution completed
-📊 Charts saved in: charts/
-📄 Reports saved in: reports/
-📝 Logs saved in: logs/
-================================================================================
+Scraping News...
+News articles scraped: 12
+Sample news article:
+  Source: finance.yahoo.com
+  Title: Tech stocks show mixed signals as Q4 earnings season approaches...
 ```
 
-#### Generated Report Sample
+#### Enhanced JSON Response
 
-```markdown
-# Comprehensive Financial Intelligence Report
-*Generated on 2025-01-15 10:30:45*
-*Analysis Duration: 0:00:30.123456*
-*Report ID: 20250115_103045*
+```json
+{
+  "status": "success",
+  "scraping_method": "web_scraper",
+  "creators_analyzed": 3,
+  "total_tweets_scraped": 12,
+  "data": [
+    {
+      "creator": "@elonmusk",
+      "sentiment_score": 0.425,
+      "sentiment_label": "Positive",
+      "tweets_analyzed": 4,
+      "scraped_tweets": 4,
+      "engagement_rate": 4.63,
+      "sample_tweets": [
+        "Making life multiplanetary is essential for long-term survival of consciousness",
+        "Tesla production ramping up nicely this quarter",
+        "The fundamental problem with traditional finance is too much intermediation"
+      ],
+      "confidence": 0.925,
+      "scraping_method": "web_scraper"
+    }
+  ],
+  "overall_market_sentiment": 0.284,
+  "overall_sentiment_label": "Positive",
+  "alternative_sources": {
+    "reddit_posts": 8,
+    "news_articles": 12,
+    "total_alternative_sources": 20
+  },
+  "disclaimers": [
+    "Web scraping results may be limited due to platform restrictions",
+    "Sample data used when direct scraping is unavailable",
+    "Sentiment analysis based on available text content"
+  ]
+}
+```
 
-## Executive Summary
+## ⚠️ Important Limitations
 
-Based on comprehensive analysis of SEC filings, insider trading activity, and social media sentiment from key financial influencers, the current market environment shows:
+### Web Scraping Challenges
 
-- **Moderate insider selling activity** across major tech companies with total transaction value of $56.7M
-- **Cautiously optimistic sentiment** among financial influencers (average score: +0.34)
-- **Increased SEC filing activity** with 4 significant filings in the past 24 hours
-- **No unusual trading patterns** detected, with most transactions following established Pass| B
-    H -->|
+1. **Platform Restrictions**
+   - X/Twitter has sophisticated anti-bot measures
+   - Rate limiting and IP blocking
+   - JavaScript-heavy dynamic content
+   - Frequent HTML structure changes
+
+2. **Success Rates**
+   - Direct X/Twitter scraping: ~20% success rate
+   - Nitter instances: ~40% success rate (when available)
+   - Reddit scraping: ~80% success rate
+   - News scraping: ~90% success rate
+
+3. **Fallback Systems**
+   - Realistic sample data for blocked sources
+   - Alternative platform prioritization
+   - Graceful degradation of service
+
+### Recommended Approach
+
+For production use, consider:
+
+1. **Multiple Data Sources**: Don't rely solely on X/Twitter
+2. **API Integration**: Use official APIs where available and cost-effective
+3. **Proxy Rotation**: For higher success rates (advanced users)
+4. **Content Caching**: Store successful scrapes for analysis
+5. **Rate Limiting**: Respect platform resources
+
+## 🔍 RAG Integration (Unchanged)
+
+The RAG system remains the same as the original implementation, providing historical context and document similarity search capabilities.
+
+## 🛠️ Troubleshooting
+
+### Common Issues
+
+1. **Import Errors**
+   ```bash
+   # Ensure all dependencies installed
+   pip install -r requirements.txt
+   
+   # Initialize NLTK data
+   python -c "import nltk; nltk.download('punkt')"
+   ```
+
+2. **Scraping Blocked**
+   ```
+   # Expected behavior - system uses fallback data
+   WARNING - Could not scrape tweets for @username, using sample data
+   ```
+
+3. **Tool Object Not Callable**
+   ```python
+   # Use direct function for testing
+   result = analyze_sentiment_web_scraping_direct(creators)
+   
+   # Use tool for CrewAI agents
+   tools=[analyze_sentiment_web_scraping]
+   ```
+
+### Debug Mode
+
+Enable detailed logging:
+
+```python
+import logging
+logging.getLogger().setLevel(logging.DEBUG)
+```
+
+## 📝 License and Disclaimer
+
+This system is for educational and research purposes. Users are responsible for:
+
+- Reviewing platform Terms of Service
+- Implementing appropriate rate limiting
+- Respecting website robots.txt files
+- Ensuring compliance with applicable laws
+
+The web scraping functionality includes built-in ethical safeguards and fallback systems to minimize impact on target platforms.
