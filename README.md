@@ -30,7 +30,6 @@ Create a `.env` file in the project root:
 
 ```env
 OPENAI_API_KEY=your-openai-api-key-here
-# Twitter API no longer required - using web scraping instead
 ```
 
 **Note**: The system uses web scraping instead of Twitter API, with fallback sample data when scraping is blocked.
